@@ -1,0 +1,36 @@
+@startuml
+title UC11 - Envoyer une relance par mail (nominal)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Bibliothécaire" as Acteur
+boundary "RetardsComponent\n<<boundary>>" as UI
+control "RetardController\n<<control>>" as RetardController
+control "RelanceService\n<<control>>" as RelanceService
+control "EmpruntService\n<<control>>" as EmpruntService
+entity "EmpruntRepository\n<<entity>>" as EmpruntRepo
+database "Base de données" as DB
+participant "JavaMailSender\n<<système externe>>" as MailSender
+
+Acteur -> UI : sélectionner un emprunt en retard\net déclencher la relance
+UI -> RetardController : POST /retards/{empruntId}/relance
+RetardController -> RelanceService : envoyerRelance(empruntId)
+
+RelanceService -> EmpruntRepo : findById(empruntId)
+EmpruntRepo -> DB : SELECT emprunt WHERE id = ?
+DB --> EmpruntRepo : Emprunt (statut EN_RETARD)
+EmpruntRepo --> RelanceService : Emprunt
+
+RelanceService -> EmpruntService : toResponse(emprunt)
+EmpruntService --> RelanceService : EmpruntResponse
+
+RelanceService -> RelanceService : construire message de relance\n(utilisateur, ressource, dates)
+RelanceService -> MailSender : send(SimpleMailMessage)\n(destinataire: email utilisateur)
+MailSender --> RelanceService : envoi confirmé
+
+RelanceService --> RetardController : RelanceResponse\n(empruntId, message confirmation)
+RetardController --> UI : 200 OK + RelanceResponse
+UI --> Acteur : confirmation "Relance envoyée\nà [email utilisateur]"
+
+@enduml

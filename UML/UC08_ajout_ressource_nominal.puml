@@ -1,0 +1,48 @@
+@startuml
+title UC08 - Ajouter une ressource documentaire (nominal)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Bibliothécaire" as Acteur
+boundary "RessourceFormComponent\n<<boundary>>" as UI
+control "RessourceController\n<<control>>" as RessourceController
+control "RessourceService\n<<control>>" as RessourceService
+control "RessourceFactory\n<<control>>" as RessourceFactory
+entity "EmplacementRepository\n<<entity>>" as EmplacementRepo
+entity "RessourceRepository\n<<entity>>" as RessourceRepo
+database "Base de données" as DB
+
+Acteur -> UI : choisir le type de ressource\n(Livre ou Revue)
+Acteur -> UI : saisir les métadonnées\n+ emplacement + nb exemplaires
+
+UI -> RessourceController : POST /ressources\n(RessourceCreateRequest)
+RessourceController -> RessourceService : creer(RessourceCreateRequest)
+
+RessourceService -> EmplacementRepo : findByCode(emplacementCode)
+EmplacementRepo -> DB : SELECT emplacement\nWHERE code = ?
+DB --> EmplacementRepo : Emplacement trouvé
+EmplacementRepo --> RessourceService : Emplacement
+
+alt UC08.1 - Ajout d'un Livre
+    RessourceService -> RessourceFactory : create(request, emplacement)
+    RessourceFactory -> RessourceFactory : buildLivre(request, emplacement)\n(isbn, auteur)
+    RessourceFactory -> RessourceFactory : generateBarcode(LIVRE)\npour chaque exemplaire
+    RessourceFactory --> RessourceService : Livre avec exemplaires
+
+else UC08.2 - Ajout d'une Revue
+    RessourceService -> RessourceFactory : create(request, emplacement)
+    RessourceFactory -> RessourceFactory : buildRevue(request, emplacement)\n(numero)
+    RessourceFactory -> RessourceFactory : generateBarcode(REVUE)\npour chaque exemplaire
+    RessourceFactory --> RessourceService : Revue avec exemplaires
+end
+
+RessourceService -> RessourceRepo : save(ressource)
+RessourceRepo -> DB : INSERT INTO ressource\n+ INSERT INTO exemplaire (x N)
+DB --> RessourceRepo : ressource + exemplaires persistés
+RessourceRepo --> RessourceService : RessourceDocumentaire
+RessourceService --> RessourceController : RessourceResponse
+RessourceController --> UI : 200 OK + RessourceResponse
+UI --> Acteur : confirmation ajout\n(id, exemplaires créés, codes-barres)
+
+@enduml

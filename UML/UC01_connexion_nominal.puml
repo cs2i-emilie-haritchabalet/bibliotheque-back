@@ -1,0 +1,26 @@
+@startuml
+title UC01 - Se connecter (nominal)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Utilisateur /\nBibliothécaire" as Acteur
+boundary "LoginComponent\n<<boundary>>" as UI
+control "AuthController\n<<control>>" as AuthController
+control "AuthService\n<<control>>" as AuthService
+entity "UtilisateurRepository\n<<entity>>" as UserRepo
+database "Base de données" as DB
+
+Acteur -> UI : saisir email + mot de passe
+UI -> AuthController : POST /auth/login\n(LoginRequest)
+AuthController -> AuthService : login(LoginRequest)
+AuthService -> UserRepo : findByEmail(email)
+UserRepo -> DB : SELECT utilisateur\nWHERE email = ?
+DB --> UserRepo : utilisateur trouvé
+UserRepo --> AuthService : Optional<Utilisateur>
+AuthService -> AuthService : vérifier mot de passe\n(passwordEncoder.matches)
+AuthService --> AuthController : LoginResponse\n(id, email, nomComplet, role, type)
+AuthController --> UI : 200 OK + LoginResponse
+UI --> Acteur : redirection vers interface\ncorrespondant au rôle
+
+@enduml

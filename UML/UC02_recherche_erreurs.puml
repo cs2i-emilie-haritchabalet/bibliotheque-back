@@ -1,0 +1,25 @@
+@startuml
+title UC02 - Rechercher une ressource (erreurs)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Utilisateur" as Acteur
+boundary "RechercheComponent\n<<boundary>>" as UI
+control "RessourceController\n<<control>>" as RessourceController
+control "RessourceService\n<<control>>" as RessourceService
+entity "RessourceRepository\n<<entity>>" as RessourceRepo
+database "Base de données" as DB
+
+Acteur -> UI : saisir critères de recherche
+UI -> RessourceController : GET /ressources/recherche?q=...
+RessourceController -> RessourceService : rechercheSimple(titre)
+RessourceService -> RessourceRepo : findByTitreContainingIgnoreCase(titre)
+RessourceRepo -> DB : SELECT * FROM ressource\nWHERE titre ILIKE ?
+DB --> RessourceRepo : liste vide
+RessourceRepo --> RessourceService : List vide
+RessourceService --> RessourceController : List<RessourceResponse> vide
+RessourceController --> UI : 200 OK + []
+UI --> Acteur : message "Aucun résultat trouvé\npour ces critères"
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+title UC10 - Lister les emprunts en retard (erreurs)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Bibliothécaire" as Acteur
+boundary "RetardsComponent\n<<boundary>>" as UI
+control "RetardController\n<<control>>" as RetardController
+control "EmpruntService\n<<control>>" as EmpruntService
+entity "EmpruntRepository\n<<entity>>" as EmpruntRepo
+database "Base de données" as DB
+
+Acteur -> UI : accéder à "Emprunts en retard"
+UI -> RetardController : GET /retards
+RetardController -> EmpruntService : listerRetards()
+EmpruntService -> EmpruntRepo : findByStatut(EN_RETARD)
+EmpruntRepo -> DB : SELECT emprunts WHERE statut = 'EN_RETARD'
+DB --> EmpruntRepo : liste vide
+EmpruntRepo --> EmpruntService : List vide
+EmpruntService --> RetardController : List<EmpruntResponse> vide
+RetardController --> UI : 200 OK + []
+UI --> Acteur : message "Aucun emprunt\nen retard"
+
+@enduml

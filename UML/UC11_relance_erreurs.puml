@@ -1,0 +1,48 @@
+@startuml
+title UC11 - Envoyer une relance par mail (erreurs)
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceLifeLineBorderColor #999
+
+actor "Bibliothécaire" as Acteur
+boundary "RetardsComponent\n<<boundary>>" as UI
+control "RetardController\n<<control>>" as RetardController
+control "RelanceService\n<<control>>" as RelanceService
+entity "EmpruntRepository\n<<entity>>" as EmpruntRepo
+database "Base de données" as DB
+participant "JavaMailSender\n<<système externe>>" as MailSender
+
+Acteur -> UI : sélectionner un emprunt\net déclencher la relance
+UI -> RetardController : POST /retards/{empruntId}/relance
+RetardController -> RelanceService : envoyerRelance(empruntId)
+RelanceService -> EmpruntRepo : findById(empruntId)
+
+alt Emprunt introuvable
+    EmpruntRepo -> DB : SELECT emprunt WHERE id = ?
+    DB --> EmpruntRepo : résultat vide
+    EmpruntRepo --> RelanceService : Optional.empty()
+    RelanceService --> RetardController : NotFoundException\n("Emprunt introuvable")
+    RetardController --> UI : 404 Not Found
+    UI --> Acteur : message "Emprunt introuvable"
+
+else Emprunt non en retard
+    EmpruntRepo -> DB : SELECT emprunt WHERE id = ?
+    DB --> EmpruntRepo : Emprunt (statut = EN_COURS ou RETOURNE)
+    EmpruntRepo --> RelanceService : Emprunt
+    RelanceService -> RelanceService : vérifier statut → pas EN_RETARD
+    RelanceService --> RetardController : BusinessException\n("Cet emprunt n'est pas en retard")
+    RetardController --> UI : 400 Bad Request
+    UI --> Acteur : message "Cet emprunt\nn'est pas en retard"
+
+else Échec envoi mail
+    EmpruntRepo -> DB : SELECT emprunt WHERE id = ?
+    DB --> EmpruntRepo : Emprunt (statut EN_RETARD)
+    EmpruntRepo --> RelanceService : Emprunt
+    RelanceService -> MailSender : send(SimpleMailMessage)
+    MailSender --> RelanceService : MailException\n(serveur SMTP inaccessible)
+    RelanceService --> RetardController : BusinessException\n("Échec de l'envoi du mail")
+    RetardController --> UI : 500 Internal Server Error
+    UI --> Acteur : message "Échec de l'envoi\nde la relance"
+end
+
+@enduml

@@ -1,0 +1,39 @@
+# Compilation
+target/
+build/
+out/
+
+# Fichiers binaires
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# VS Code (si utilisé)
+.vscode/
+
+# Eclipse (au cas où)
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven wrapper (garder les bons fichiers)
+.mvn/wrapper/maven-wrapper.jar
+
+# Node (si front dans le projet)
+node_modules/
+
+# fichiers environnement
+.env
