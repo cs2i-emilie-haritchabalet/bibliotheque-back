@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import tp.bibliotheque.entity.Utilisateur;
 import tp.bibliotheque.repository.UtilisateurRepository;
@@ -32,9 +31,26 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+
+                        // Administration des utilisateurs
                         .requestMatchers(HttpMethod.POST, "/api/utilisateurs").hasRole("BIBLIOTHECAIRE")
-                        .requestMatchers("/api/retards/**").hasRole("BIBLIOTHECAIRE")
+                        .requestMatchers(HttpMethod.GET, "/api/utilisateurs").hasRole("BIBLIOTHECAIRE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/utilisateurs/*/credit-caution").hasRole("BIBLIOTHECAIRE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/utilisateurs/*/debit-caution").hasRole("BIBLIOTHECAIRE")
+
+                        // Administration des ressources
                         .requestMatchers(HttpMethod.POST, "/api/ressources").hasRole("BIBLIOTHECAIRE")
+
+                        // Gestion des retards et relances
+                        .requestMatchers("/api/retards/**").hasRole("BIBLIOTHECAIRE")
+
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
+                        // Toutes les autres routes nécessitent une authentification
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
@@ -54,7 +70,7 @@ public class SecurityConfig {
                     .disabled(!Boolean.TRUE.equals(utilisateur.getActif()))
                     .build();
 
-            return new InMemoryUserDetailsManager(user).loadUserByUsername(username);
+            return user;
         };
     }
 
