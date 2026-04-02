@@ -3,9 +3,10 @@ package tp.bibliotheque.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import tp.bibliotheque.dto.RelanceResponse;
 import tp.bibliotheque.entity.Emplacement;
 import tp.bibliotheque.entity.Emprunt;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,13 +40,17 @@ class RelanceServiceTest {
     @Mock
     private EmpruntService empruntService;
 
-    @InjectMocks
+    @Mock
+    private JavaMailSender mailSender;
+
     private RelanceService relanceService;
 
     private Emprunt empruntEnRetard;
 
     @BeforeEach
     void setUp() {
+        relanceService = new RelanceService(empruntRepository, empruntService, mailSender);
+
         Utilisateur utilisateur = Utilisateur.builder()
                 .id(1L)
                 .nom("Dupont")
@@ -92,6 +98,7 @@ class RelanceServiceTest {
         RelanceResponse response = relanceService.envoyerRelance(5L);
 
         verify(empruntService).updateRetards();
+        verify(mailSender).send(any(SimpleMailMessage.class));
         assertThat(response.empruntId()).isEqualTo(5L);
         assertThat(response.message()).contains("alice@univ.test");
     }
