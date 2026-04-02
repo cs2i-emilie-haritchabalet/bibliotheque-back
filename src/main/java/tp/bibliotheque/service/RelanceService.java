@@ -1,6 +1,8 @@
 package tp.bibliotheque.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tp.bibliotheque.dto.RelanceResponse;
@@ -16,6 +18,7 @@ public class RelanceService {
 
     private final EmpruntRepository empruntRepository;
     private final EmpruntService empruntService;
+    private final JavaMailSender mailSender;
 
     @Transactional
     public RelanceResponse envoyerRelance(Long empruntId) {
@@ -33,19 +36,18 @@ public class RelanceService {
         String titre = emprunt.getExemplaire().getRessource().getTitre();
         var dateRetourPrevue = emprunt.getDateRetourPrevue();
 
-        System.out.println("=== RELANCE SIMULÉE ===");
-        System.out.println("À : " + email);
-        System.out.println("Sujet : Relance de prêt en retard");
-        System.out.println("Message :");
-        System.out.println("Bonjour " + prenom + ",");
-        System.out.println();
-        System.out.println("Votre emprunt pour la ressource '" + titre
-                + "' est en retard depuis le " + dateRetourPrevue + ".");
-        System.out.println("Merci d'effectuer le retour dès que possible.");
-        System.out.println();
-        System.out.println("Bibliothèque universitaire");
-        System.out.println("=======================");
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Relance de prêt en retard");
+        message.setText(
+                "Bonjour " + prenom + ",\n\n" +
+                        "Votre emprunt pour la ressource '" + titre + "' est en retard depuis le " + dateRetourPrevue + ".\n" +
+                        "Merci d'effectuer le retour dès que possible.\n\n" +
+                        "Bibliothèque universitaire"
+        );
 
-        return new RelanceResponse(empruntId, "Relance simulée pour " + email);
+        mailSender.send(message);
+
+        return new RelanceResponse(empruntId, "Relance envoyée à " + email);
     }
 }

@@ -24,8 +24,7 @@ public class RetardController {
     }
 
     @PostMapping("/{empruntId}/relance")
-    public Map<String, String> envoyerRelance(@PathVariable Long empruntId) {
-        relanceService.envoyerRelance(empruntId);
-        return Map.of("message", "Relance envoyée avec succès.");
+    public RelanceResponse envoyerRelance(@PathVariable Long empruntId) {
+        return relanceService.envoyerRelance(empruntId);
     }
 }
