@@ -10,8 +10,8 @@ INSERT INTO ressources (id, titre, auteur, annee_publication, theme, caution_exi
 VALUES (2, 'Effective Java', 'Joshua Bloch', 2018, 'Java', 30.00, 2);
 
 -- LIVRE (table fille, JOINED)
-INSERT INTO livre (id, isbn) VALUES (1, '9780132350884');
-INSERT INTO livre (id, isbn) VALUES (2, '9780134685991');
+INSERT INTO LIVRE (id, isbn) VALUES (1, '9780132350884');
+INSERT INTO LIVRE (id, isbn) VALUES (2, '9780134685991');
 
 -- UTILISATEURS
 
