@@ -1,10 +1,10 @@
 name: Documentation
 
 on:
+  workflow_call:
   push:
-    branches: [main]
     paths:
-      - 'docs/**'        # se déclenche uniquement si la doc change
+      - 'docs/**'
       - 'zensical.toml'
 
 jobs:
