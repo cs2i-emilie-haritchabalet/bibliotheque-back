@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.3.11</version>
         <relativePath/>
     </parent>
 
@@ -30,6 +30,8 @@
         <sonar.coverage.jacoco.xmlReportPaths>
             ${project.build.directory}/site/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
+
+        <postgresql.version>42.7.11</postgresql.version>
     </properties>
 
     <dependencies>
@@ -138,7 +140,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>10.0.3</version>
+                <version>11.1.1</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

@@ -1,23 +1,23 @@
-# Build stage
-FROM maven:3.9-eclipse-temurin-17 AS build
+    # Build stage
+    FROM maven:eclipse-temurin:17-jre-alpine AS build
 
-WORKDIR /app
-COPY . .
+    WORKDIR /app
+    COPY . .
 
-RUN mvn clean package -DskipTests
+    RUN mvn clean package -DskipTests
 
-# Runtime stage
-FROM eclipse-temurin:17-jre
+    # Runtime stage
+    FROM eclipse-temurin:17-jre
 
-WORKDIR /app
+    WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+    COPY --from=build /app/target/*.jar app.jar
 
-# création user non-root
-RUN useradd -m appuser
+    # création user non-root
+    RUN useradd -m appuser
 
-USER appuser
+    USER appuser
 
-EXPOSE 8080
+    EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","app.jar"]
+    ENTRYPOINT ["java","-jar","app.jar"]
