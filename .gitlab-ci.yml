@@ -82,6 +82,8 @@ dependency-check:
 # ─────────────────────────────────────────────
 
 docker-build:
+  needs:
+    - build-test
   stage: image
   image: docker:latest
   services:
@@ -111,14 +113,18 @@ trivy-scan:
   services:
     - docker:dind
 
+  needs:
+    - docker-build
+
   script:
-    - docker run --rm
-      -v /var/run/docker.sock:/var/run/docker.sock
-      aquasec/trivy:${TRIVY_VERSION}
-      image --no-progress
-      --severity HIGH,CRITICAL
-      --exit-code 1
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - |
+      docker run --rm \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        aquasec/trivy:${TRIVY_VERSION} \
+        image --no-progress \
+        --severity HIGH,CRITICAL \
+        --exit-code 1 \
+        $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
   only:
     - main
