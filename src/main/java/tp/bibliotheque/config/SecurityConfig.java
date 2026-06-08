@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tp.bibliotheque.entity.Utilisateur;
 import tp.bibliotheque.repository.UtilisateurRepository;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
@@ -59,6 +61,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @org.springframework.context.annotation.Profile("!test")
     public UserDetailsService userDetailsService() {
         return username -> {
             Utilisateur utilisateur = utilisateurRepository.findByEmail(username)
