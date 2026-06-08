@@ -68,7 +68,7 @@ dependency-check:
   image: maven:3.9-eclipse-temurin-17
 
   script:
-      - mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -Dformats=HTML,JSON
+    - mvn org.owasp:dependency-check-maven:11.1.1:check -DfailBuildOnCVSS=7 -Dformats=HTML,JSON
 
   allow_failure: true
 
@@ -116,15 +116,23 @@ trivy-scan:
   needs:
     - docker-build
 
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+
   script:
     - |
       docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
+        -e TRIVY_USERNAME=$CI_REGISTRY_USER \
+        -e TRIVY_PASSWORD=$CI_REGISTRY_PASSWORD \
         aquasec/trivy:${TRIVY_VERSION} \
         image --no-progress \
         --severity HIGH,CRITICAL \
         --exit-code 1 \
         $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+  after_script:
+    - docker logout
 
   only:
     - main
