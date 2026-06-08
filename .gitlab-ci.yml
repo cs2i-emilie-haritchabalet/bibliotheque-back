@@ -35,7 +35,7 @@ build-test:
 
   script:
     - chmod +x mvnw
-    - ./mvnw clean verify
+    - mvn clean verify
 
   artifacts:
     when: always
@@ -68,7 +68,7 @@ dependency-check:
   image: maven:3.9-eclipse-temurin-17
 
   script:
-      - ./mvnw org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -Dformats=HTML,JSON
+      - mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -Dformats=HTML,JSON
 
   allow_failure: true
 
