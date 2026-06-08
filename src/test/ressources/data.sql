@@ -15,21 +15,21 @@ INSERT INTO livre (id, isbn) VALUES (2, '9780134685991');
 
 -- UTILISATEURS
 
-INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role, type, caution_disponible, actif)
+INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, type, caution_disponible, actif)
 VALUES ('Admin', 'Biblio', 'admin@biblio.fr',
         '$2a$10$Emv4GC2YYocQ4GSCJ7m2AeH.u0DHHyhum6D3DSbEEjfyTVhaW5l2K',
         'BIBLIOTHECAIRE', 'BIBLIOTHECAIRE', 0.00, true);
 
 
-INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role, type, caution_disponible, actif)
+INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, type, caution_disponible, actif)
 VALUES ('Durand', 'Alice', 'alice@etu.fr',
         '$2a$10$eXmQcieZQxLRb4VsNugU5ONvhfm3r8rpaUoRIbS60ak8W8Nn2swqu',
         'USER', 'ETUDIANT', 120.00, true);
 
-INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role, type, actif, caution_disponible)
+INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role, type, caution_disponible, actif)
 VALUES (3, 'Benali', 'Mehdi', 'mehdi@etu.fr',
         '$2a$10$eXmQcieZQxLRb4VsNugU5ONvhfm3r8rpaUoRIbS60ak8W8Nn2swqu',
-        'USER', 'ETUDIANT', true, 60.00);
+        'USER', 'ETUDIANT', 60.00, true);
 
 -- EXEMPLAIRES
 INSERT INTO exemplaires (id, code_barres, statut, ressource_id)
