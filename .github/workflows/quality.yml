@@ -25,8 +25,8 @@ jobs:
         run: |
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=bibliotheque \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Semgrep
         run: |
