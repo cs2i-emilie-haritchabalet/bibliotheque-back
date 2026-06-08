@@ -29,9 +29,7 @@ build-test:
         POSTGRES_PASSWORD: postgres
 
   variables:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bibliotheque
-    SPRING_DATASOURCE_USERNAME: postgres
-    SPRING_DATASOURCE_PASSWORD: postgres
+    SPRING_PROFILES_ACTIVE: test
     SPRING_MAIL_HOST: localhost
     SPRING_MAIL_PORT: 1025
 
