@@ -2,10 +2,9 @@ spring:
   application:
     name: bibliotheque
   datasource:
-    url: jdbc:h2:mem:bibliotheque;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/bibliotheque
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: update
