@@ -25,6 +25,7 @@ jobs:
         run: |
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=bibliotheque \
+            -Dsonar.organization=cs2i-emilie-haritchabalet \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
