@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import tp.bibliotheque.entity.Emplacement;
 import tp.bibliotheque.entity.Emprunt;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 
 @Configuration
 @RequiredArgsConstructor
+@Profile("!test")
 public class DataInitializer {
 
     private final PasswordEncoder passwordEncoder;
