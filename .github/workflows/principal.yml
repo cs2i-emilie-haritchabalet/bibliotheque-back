@@ -1,4 +1,4 @@
-#workflow principal
+# workflow principal de cours
 name: CI
 on:
   push:
