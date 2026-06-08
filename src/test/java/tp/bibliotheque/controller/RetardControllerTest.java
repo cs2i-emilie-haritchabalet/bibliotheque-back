@@ -2,9 +2,9 @@ package tp.bibliotheque.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tp.bibliotheque.dto.EmpruntResponse;
 import tp.bibliotheque.dto.RelanceResponse;
@@ -30,10 +30,10 @@ class RetardControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
+    @MockBean
     private EmpruntService empruntService;
 
-    @MockitoBean
+    @MockBean
     private RelanceService relanceService;
 
     @Test
