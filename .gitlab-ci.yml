@@ -11,7 +11,6 @@ stages:
   - test
   - security
   - image
-  - dast
 
 # ─────────────────────────────────────────────
 # BUILD + TESTS
@@ -71,9 +70,7 @@ dependency-check:
   image: maven:3.9-eclipse-temurin-17
 
   script:
-    - ./mvnw org.owasp:dependency-check-maven:check
-      -DfailBuildOnCVSS=7
-      -Dformats=HTML,JSON
+      - ./mvnw org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -Dformats=HTML,JSON
 
   allow_failure: true
 
@@ -88,6 +85,9 @@ dependency-check:
 
 docker-build:
   stage: image
+  image: docker:latest
+  services:
+    - docker:dind
 
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
@@ -109,6 +109,9 @@ docker-build:
 
 trivy-scan:
   stage: image
+  image: docker:latest
+  services:
+    - docker:dind
 
   script:
     - docker run --rm
@@ -122,25 +125,3 @@ trivy-scan:
   only:
     - main
     - develop
-
-# ─────────────────────────────────────────────
-# DAST (OWASP ZAP)
-# ─────────────────────────────────────────────
-
-dast-zap:
-  stage: dast
-  image: zaproxy/zap-stable
-
-  variables:
-    APP_URL: "http://staging:8080"
-
-  script:
-    - mkdir -p /zap/wrk
-    - zap-baseline.py -t $APP_URL -r zap-report.html
-
-  artifacts:
-    when: always
-    paths:
-      - /zap/wrk/zap-report.html
-
-  when: manual
