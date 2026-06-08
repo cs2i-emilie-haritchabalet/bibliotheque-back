@@ -1,0 +1,146 @@
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  TRIVY_VERSION: "0.69.3"
+
+cache:
+  paths:
+    - .m2/repository/
+
+stages:
+  - build
+  - test
+  - security
+  - image
+  - dast
+
+# ─────────────────────────────────────────────
+# BUILD + TESTS
+# ─────────────────────────────────────────────
+
+build-test:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+
+  services:
+    - name: postgres:16
+      alias: postgres
+      variables:
+        POSTGRES_DB: bibliotheque
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+
+  variables:
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bibliotheque
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: postgres
+    SPRING_MAIL_HOST: localhost
+    SPRING_MAIL_PORT: 1025
+
+  script:
+    - chmod +x mvnw
+    - ./mvnw clean verify
+
+  artifacts:
+    when: always
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+    paths:
+      - target/
+
+# ─────────────────────────────────────────────
+# SECURITY (SAST + SCA)
+# ─────────────────────────────────────────────
+
+semgrep-sast:
+  stage: security
+  image: semgrep/semgrep
+
+  script:
+    - semgrep ci --config=auto --json --output=semgrep-report.json
+
+  allow_failure: true
+
+  artifacts:
+    when: always
+    paths:
+      - semgrep-report.json
+
+
+dependency-check:
+  stage: security
+  image: maven:3.9-eclipse-temurin-17
+
+  script:
+    - ./mvnw org.owasp:dependency-check-maven:check
+      -DfailBuildOnCVSS=7
+      -Dformats=HTML,JSON
+
+  allow_failure: true
+
+  artifacts:
+    when: always
+    paths:
+      - target/dependency-check-report.*
+
+# ─────────────────────────────────────────────
+# BUILD DOCKER IMAGE
+# ─────────────────────────────────────────────
+
+docker-build:
+  stage: image
+
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+  after_script:
+    - docker logout
+
+  only:
+    - main
+    - develop
+
+# ─────────────────────────────────────────────
+# CONTAINER SECURITY (TRIVY)
+# ─────────────────────────────────────────────
+
+trivy-scan:
+  stage: image
+
+  script:
+    - docker run --rm
+      -v /var/run/docker.sock:/var/run/docker.sock
+      aquasec/trivy:${TRIVY_VERSION}
+      image --no-progress
+      --severity HIGH,CRITICAL
+      --exit-code 1
+      $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+  only:
+    - main
+    - develop
+
+# ─────────────────────────────────────────────
+# DAST (OWASP ZAP)
+# ─────────────────────────────────────────────
+
+dast-zap:
+  stage: dast
+  image: zaproxy/zap-stable
+
+  variables:
+    APP_URL: "http://staging:8080"
+
+  script:
+    - mkdir -p /zap/wrk
+    - zap-baseline.py -t $APP_URL -r zap-report.html
+
+  artifacts:
+    when: always
+    paths:
+      - /zap/wrk/zap-report.html
+
+  when: manual

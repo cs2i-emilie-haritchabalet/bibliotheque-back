@@ -1,0 +1,39 @@
+name: Security
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: OWASP Dependency Check
+        run: |
+          ./mvnw org.owasp:dependency-check-maven:check \
+            -DfailBuildOnCVSS=7
+
+  trivy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t app:${{ github.sha }} .
+
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: app:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: 1

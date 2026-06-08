@@ -1,0 +1,24 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'        # se déclenche uniquement si la doc change
+      - 'zensical.toml'
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Zensical
+        run: pip install zensical
+
+      - name: Deploy to GitHub Pages
+        run: zensical gh-deploy --force

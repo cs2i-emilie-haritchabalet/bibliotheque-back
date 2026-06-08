@@ -1,0 +1,13 @@
+#workflow principal
+name: CI
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  documentation:
+    uses: ./.github/workflows/cours.yml
+
+  tests:
+    uses: ./.github/workflows/tests.yml
