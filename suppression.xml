@@ -23,4 +23,17 @@
         <cve>CVE-2025-15104</cve>
     </suppress>
 
+    <suppress>
+        <notes>
+            angus-activation 2.0.3 transitif via jakarta.mail 2.0.4 (Spring Boot BOM)
+            aucune version corrective disponible sans upgrade Jakarta Mail / Spring Boot
+            risque jugé faible dans contexte serveur
+        </notes>
+
+        <packageUrl regex="true">
+            ^pkg:maven/org\.eclipse\.angus/angus-activation@2\.0\.3$
+        </packageUrl>
+
+        <cve>CVE-2025-7962</cve>
+    </suppress>
 </suppressions>
