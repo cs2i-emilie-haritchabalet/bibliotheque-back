@@ -13,9 +13,10 @@ GitHub est utilisé comme plateforme principale DevSecOps.
 ### 1. Quality
 - SonarQube (analyse qualité)
 - Semgrep (SAST)
+- SpotBugs + Find Security Bugs (analyse statique bytecode)
 
 ### 2. Security
-- Dependency Check (SCA)
+- OWASP Dependency Check (SCA, seuil CVSS ≥ 7.0)
 - Trivy (scan image Docker)
 
 ### 3. Secrets

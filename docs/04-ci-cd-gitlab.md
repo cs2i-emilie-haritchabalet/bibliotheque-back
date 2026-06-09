@@ -12,12 +12,13 @@ GitLab est utilisé comme moteur CI/CD avec un runner Docker.
 
 ### Étapes :
 
-- build (Maven)
-- test (JUnit)
-- security scan
-- build Docker image
-- scan image (Trivy)
-- DAST manuel
+- 1) build — Maven (mvn clean package)
+- 2) test — JUnit + JaCoCo (couverture de code)
+- 3) quality — Checkstyle (google_checks), SpotBugs + Find Security Bugs
+- 4) sca — OWASP Dependency Check (seuil CVSS ≥ 7.0, fichier suppression.xml)
+- 5) build image — Docker multi-stage (eclipse-temurin:17-jre-alpine)
+- 6) scan image — Trivy (vulnérabilités OS + JAR + binaires Go)
+- 7) DAST — OWASP ZAP (manuel)
 
 ---
 

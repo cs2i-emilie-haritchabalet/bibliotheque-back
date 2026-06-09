@@ -20,11 +20,6 @@ La phase de conception a permis de modéliser le système de bibliothèque unive
     - Rechercher une ressource
     - Gérer les utilisateurs
 
-- Diagramme d’état :
-    - EN_COURS
-    - EN_RETARD
-    - RETOURNE
-
 ---
 
 ## Architecture métier initiale

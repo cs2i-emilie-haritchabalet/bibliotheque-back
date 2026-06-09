@@ -6,8 +6,8 @@
 
 - Backend : Spring Boot (Java 17)
 - Frontend : Angular (non inclus ici)
-- Base de données : PostgreSQL / H2 (dev)
-- Containerisation : Docker
+- Base de données : PostgreSQL 16 / H2 (tests)
+- Containerisation : Docker (image eclipse-temurin:17-jre-alpine)
 - CI/CD : GitHub Actions + GitLab CI
 
 ---
@@ -19,9 +19,10 @@ Frontend Angular → API Spring Boot → PostgreSQL
 
 ## Sécurité intégrée
 
-- Spring Security (HTTP Basic)
-- contrôle d’accès par rôles
-- validation des entrées
+- Spring Security 6.5.10 (HTTP Basic)
+- contrôle d'accès par rôles
+- validation des entrées (hibernate-validator)
+- image Docker non-root (user appuser)
 
 ---
 
