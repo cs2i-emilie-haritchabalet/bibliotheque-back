@@ -1,91 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 
-    <!-- Faux positifs Spring Boot 3.5.0 - derniere version stable, pas de correctif disponible -->
+    <!-- DOMPurify 3.2.4 embarque dans swagger-ui-5.21.0 (via springdoc 2.8.17)
+         CVE XSS cote client uniquement - Swagger expose en environnement interne
+         a revoir quand springdoc embarque une version corrigee de swagger-ui -->
     <suppress>
-        <notes>Spring Boot 3.5.0 - faux positif, aucune version corrective disponible</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot.*@3\.5\.0$</packageUrl>
-        <cve>CVE-2026-40974</cve>
-        <cve>CVE-2026-40971</cve>
-        <cve>CVE-2026-40972</cve>
-        <cve>CVE-2026-40973</cve>
-        <cve>CVE-2026-40975</cve>
-        <cve>CVE-2026-40977</cve>
-        <cve>CVE-2026-22731</cve>
-        <cve>CVE-2026-22733</cve>
+        <notes>DOMPurify 3.2.4 dans swagger-ui - risque accepté, exposition interne uniquement</notes>
+        <packageUrl regex="true">^pkg:javascript/DOMPurify@.*$</packageUrl>
+        <cve>CVE-2025-15599</cve>
+        <cve>CVE-2026-0540</cve>
+        <cve>CVE-2026-41238</cve>
+        <cve>CVE-2026-41239</cve>
+        <cve>CVE-2026-41240</cve>
     </suppress>
 
-    <!-- Faux positifs Spring Framework 6.2.7 -->
+    <!-- hibernate-validator 8.0.3.Final - version geree par Spring Boot 3.5.14 BOM
+         Pas de version corrective disponible dans la branche Spring Boot 3.x
+         a revoir lors du passage a Spring Boot 4.x -->
     <suppress>
-        <notes>Spring Framework 6.2.7 - faux positif, aucune version corrective disponible</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@6\.2\.7$</packageUrl>
-        <cve>CVE-2026-22735</cve>
-        <cve>CVE-2026-22737</cve>
-        <cve>CVE-2026-22740</cve>
-        <cve>CVE-2026-22741</cve>
-        <cve>CVE-2026-22745</cve>
-    </suppress>
-
-    <!-- Faux positifs Spring Security 6.5.0 -->
-    <suppress>
-        <notes>Spring Security 6.5.0 - faux positif, aucune version corrective disponible</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-.*@6\.5\.0$</packageUrl>
-        <cve>CVE-2026-22732</cve>
-        <cve>CVE-2026-22746</cve>
-        <cve>CVE-2026-22748</cve>
-        <cve>CVE-2026-22751</cve>
-    </suppress>
-
-    <!-- Faux positifs Tomcat 10.1.41 -->
-    <suppress>
-        <notes>Tomcat 10.1.41 - faux positif, aucune version corrective disponible</notes>
-        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-.*@10\.1\.41$</packageUrl>
-        <cve>CVE-2026-41293</cve>
-        <cve>CVE-2026-43512</cve>
-        <cve>CVE-2025-55754</cve>
-        <cve>CVE-2025-66614</cve>
-        <cve>CVE-2026-29145</cve>
-        <cve>CVE-2026-43515</cve>
-        <cve>CVE-2025-49124</cve>
-        <cve>CVE-2025-48988</cve>
-        <cve>CVE-2025-48989</cve>
-        <cve>CVE-2025-49125</cve>
-        <cve>CVE-2025-52520</cve>
-        <cve>CVE-2025-53506</cve>
-        <cve>CVE-2025-55752</cve>
-        <cve>CVE-2026-24734</cve>
-        <cve>CVE-2026-24880</cve>
-        <cve>CVE-2026-29146</cve>
-        <cve>CVE-2026-34483</cve>
-        <cve>CVE-2026-34487</cve>
-        <cve>CVE-2026-41284</cve>
-        <cve>CVE-2026-43513</cve>
-        <cve>CVE-2026-42498</cve>
-        <cve>CVE-2026-24733</cve>
-        <cve>CVE-2026-43514</cve>
-        <cve>CVE-2025-55668</cve>
-        <cve>CVE-2026-34500</cve>
-        <cve>CVE-2026-25854</cve>
-        <cve>CVE-2025-61795</cve>
-    </suppress>
-
-    <!-- Faux positifs Log4j 2.24.3 -->
-    <suppress>
-        <notes>Log4j 2.24.3 - faux positif, aucune version corrective disponible</notes>
-        <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j\-.*@2\.24\.3$</packageUrl>
-        <cve>CVE-2026-34477</cve>
-        <cve>CVE-2026-34478</cve>
-        <cve>CVE-2026-34479</cve>
-        <cve>CVE-2026-34480</cve>
-        <cve>CVE-2026-34481</cve>
-        <cve>CVE-2025-68161</cve>
-    </suppress>
-
-    <!-- Faux positif angus-activation -->
-    <suppress>
-        <notes>angus-activation 2.0.2 - version geree par Spring Boot BOM</notes>
-        <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus\-activation@2\.0\.2$</packageUrl>
-        <cve>CVE-2025-7962</cve>
+        <notes>hibernate-validator 8.0.3.Final - aucune version corrective disponible dans Spring Boot 3.x</notes>
+        <packageUrl regex="true">^pkg:maven/org\.hibernate\.validator/hibernate\-validator@8\.0\.3\.Final$</packageUrl>
+        <cve>CVE-2025-15104</cve>
     </suppress>
 
 </suppressions>
