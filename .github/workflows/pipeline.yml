@@ -5,6 +5,7 @@ on:
   push:
     branches: [main, develop]
   pull_request:
+    branches: [main, develop]
 
 jobs:
   quality:
@@ -20,4 +21,7 @@ jobs:
 
   docs:
     needs: sbom
+    if: |
+      contains(github.event.commits.*.modified, 'docs/') ||
+      github.event_name == 'workflow_call'
     uses: ./.github/workflows/docs.yml

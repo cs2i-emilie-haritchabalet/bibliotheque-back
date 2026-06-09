@@ -2,10 +2,6 @@ name: Documentation
 
 on:
   workflow_call:
-  push:
-    paths:
-      - 'docs/**'
-      - 'zensical.toml'
 
 jobs:
   deploy-docs:
