@@ -1,5 +1,5 @@
     # Build stage
-    FROM maven:eclipse-temurin:17-jre-alpine AS build
+    FROM maven:3.9-eclipse-temurin-17 AS build
 
     WORKDIR /app
     COPY . .
