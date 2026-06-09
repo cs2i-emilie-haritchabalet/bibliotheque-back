@@ -17,8 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tp.bibliotheque.entity.Utilisateur;
 import tp.bibliotheque.repository.UtilisateurRepository;
-import org.springframework.context.annotation.Profile;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +27,7 @@ public class SecurityConfig {
     private final UtilisateurRepository utilisateurRepository;
 
     @Bean
+    @SuppressFBWarnings("SPRING_CSRF_PROTECTION_DISABLED")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())

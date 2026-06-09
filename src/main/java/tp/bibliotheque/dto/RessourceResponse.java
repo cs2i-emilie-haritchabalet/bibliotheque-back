@@ -15,4 +15,7 @@ public record RessourceResponse(
         String referenceSpecifique,
         List<ExemplaireResponse> exemplaires
 ) {
+    public RessourceResponse {
+        exemplaires = exemplaires != null ? List.copyOf(exemplaires) : List.of();
+    }
 }
