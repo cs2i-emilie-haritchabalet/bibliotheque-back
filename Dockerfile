@@ -14,7 +14,7 @@
     COPY --from=build /app/target/*.jar app.jar
 
     # création user non-root
-    RUN useradd -m appuser
+    RUN adduser -D appuser
 
     USER appuser
 
