@@ -19,6 +19,10 @@ import tp.bibliotheque.entity.Utilisateur;
 import tp.bibliotheque.repository.UtilisateurRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+@SuppressFBWarnings(
+        value = "SPRING_CSRF_PROTECTION_DISABLED",
+        justification = "Application REST stateless utilisant HTTP Basic."
+)
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,7 +31,6 @@ public class SecurityConfig {
     private final UtilisateurRepository utilisateurRepository;
 
     @Bean
-    @SuppressFBWarnings("SPRING_CSRF_PROTECTION_DISABLED")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
