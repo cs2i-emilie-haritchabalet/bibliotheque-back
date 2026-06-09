@@ -13,7 +13,6 @@ import tp.bibliotheque.entity.Emplacement;
 import tp.bibliotheque.entity.Emprunt;
 import tp.bibliotheque.entity.Exemplaire;
 import tp.bibliotheque.entity.Livre;
-import tp.bibliotheque.entity.RessourceDocumentaire;
 import tp.bibliotheque.entity.Utilisateur;
 import tp.bibliotheque.enums.Role;
 import tp.bibliotheque.enums.StatutEmprunt;

@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import tp.bibliotheque.dto.UtilisateurCreateRequest;
 import tp.bibliotheque.dto.UtilisateurResponse;
 import tp.bibliotheque.entity.Utilisateur;
-import tp.bibliotheque.enums.Role;
 import tp.bibliotheque.enums.TypeUtilisateur;
 import tp.bibliotheque.exception.BusinessException;
 import tp.bibliotheque.exception.NotFoundException;
