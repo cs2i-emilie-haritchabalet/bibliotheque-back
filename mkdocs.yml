@@ -1,0 +1,7 @@
+site_name: Bibliothèque - Documentation
+
+theme:
+  name: material  # ou mkdocs, readthedocs...
+
+nav:
+  - Accueil: index.md
