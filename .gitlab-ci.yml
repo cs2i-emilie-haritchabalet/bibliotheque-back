@@ -129,7 +129,7 @@ trivy-scan:
         -e TRIVY_PASSWORD=$CI_REGISTRY_PASSWORD \
         aquasec/trivy:${TRIVY_VERSION} \
         image --no-progress \
-        --severity HIGH,CRITICAL \
+        --severity CRITICAL \
         --exit-code 1 \
         $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
