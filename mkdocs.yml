@@ -1,7 +1,7 @@
 site_name: Bibliothèque - Documentation
 
 theme:
-  name: material  # ou mkdocs, readthedocs...
+  name: material
 
 nav:
   - Accueil: index.md
