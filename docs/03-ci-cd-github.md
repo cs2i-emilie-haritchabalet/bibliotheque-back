@@ -29,7 +29,7 @@ GitHub est utilisé comme plateforme principale DevSecOps.
 - OWASP ZAP
 
 ### 6. Documentation
-- génération automatique docs
+- génération automatique docs (uniquement s'il y a eu des modifications)
 
 ---
 
