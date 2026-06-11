@@ -21,8 +21,4 @@ jobs:
     uses: ./.github/workflows/sbom.yml
 
   docs:
-    needs: sbom
-    if: |
-      contains(github.event.commits.*.modified, 'docs/') ||
-      github.event_name == 'workflow_call'
     uses: ./.github/workflows/docs.yml
