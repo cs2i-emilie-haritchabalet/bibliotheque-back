@@ -1,6 +1,6 @@
 # Bibliothèque universitaire – Documentation
 
-Projet backend Spring Boot avec pipeline DevSecOps complet (GitHub Actions + GitLab CI).
+Projet backend Spring Boot avec pipeline DevSecOps (GitHub Actions + GitLab CI).
 
 ---
 
