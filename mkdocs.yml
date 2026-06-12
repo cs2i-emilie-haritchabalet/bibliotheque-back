@@ -1,7 +1,0 @@
-site_name: Bibliothèque - Documentation
-
-theme:
-  name: material
-
-nav:
-  - Accueil: index.md

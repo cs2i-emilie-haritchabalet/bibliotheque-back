@@ -1,13 +1,7 @@
-[project]
-name = "Bibliothèque API"
-description = "API de gestion de bibliothèque universitaire"
+site_name: Bibliothèque - Documentation
 
-[project.theme]
-variant = "modern"
+theme:
+  name: material
 
-[project.nav]
-pages = [
-    { title = "Accueil",     path = "index.md" },
-    { title = "Quick Start", path = "quick-start.md" },
-    { title = "API",         path = "api/overview.md" },
-]
+nav:
+  - Accueil: index.md

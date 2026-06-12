@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "docs/**"
-      - "mkdocs.yml"
+      - "../../zensical.toml"
   workflow_call:
   workflow_dispatch:
 
@@ -31,15 +31,6 @@ jobs:
 
       - name: Install Zensical
         run: pip install zensical
-
-      - name: Debug
-        run: |
-          echo "PWD:"
-          pwd
-          echo "FILES:"
-          ls -R
-          echo "MKDOCS:"
-          cat mkdocs.yml
 
       - name: Build docs
         run: zensical build
