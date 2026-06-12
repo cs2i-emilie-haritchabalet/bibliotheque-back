@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   quality:
     uses: ./.github/workflows/quality.yml
