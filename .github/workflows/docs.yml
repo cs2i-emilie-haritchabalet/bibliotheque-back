@@ -29,11 +29,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install MkDocs
-        run: pip install mkdocs mkdocs-material
+      - name: Install Zensical
+        run: pip install zensical
 
       - name: Build docs
-        run: mkdocs build
+        run: zensical build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
